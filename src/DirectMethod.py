@@ -12,6 +12,8 @@ import sys
 DEBUG_ALL = 0
 DEBUG_FILE_INPUT = 0
 DEBUG_MAKE_MATRIX = 0
+DEBUG_CALC = 0
+DEBUG_OUTPUT = 0
 
 # コマンドライン引数の使用準備とエラー処理
 argvs = sys.argv  # コマンドライン引数を格納したリストの取得
@@ -36,10 +38,24 @@ if(DEBUG_ALL or DEBUG_MAKE_MATRIX):
 	print(prefernceMatrix)
 
 # 解の計算
-# x = symbols('x')
-# print(limit((1/x) * prefernceMatrix, x, oo))
-rankingVector = np.ones([yatsuhashi_num, 1])
-hoge = np.dot(prefernceMatrix, rankingVector)
-print(prefernceMatrix)
-print(hoge)
+rankingVector = np.ones([yatsuhashi_num, 1]) # r_0 = (1, 1, ..., 1)^T とする
+normRankingVector = np.linalg.norm(rankingVector)
+normPrefernceMatrix = np.linalg.norm(prefernceMatrix)
+
+rankingVector /= normRankingVector # r_0 / |r_0| を計算
+
+for i in range(1000):
+	rankingVector = np.dot(prefernceMatrix, rankingVector) / normPrefernceMatrix
+if(DEBUG_ALL or DEBUG_CALC):
+	print(rankingVector)
+
+# 出力
+for i in range(yatsuhashi_num):
+	sys.stdout.write("No.")
+	print('%2d' % (i + 1), ":", '%2d' % (rankingVector.argmax() + 1), end = " ")
+	if(DEBUG_ALL or DEBUG_OUTPUT):
+		print("->" , rankingVector[rankingVector.argmax()])
+	else:
+		print("")
+	rankingVector[rankingVector.argmax()] *= -1
 
