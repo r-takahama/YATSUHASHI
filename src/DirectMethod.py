@@ -2,9 +2,6 @@
 import numpy as np
 from numpy import genfromtxt
 
-# sympyの利用
-from sympy import *
-
 # モジュール属性 argv を取得するため
 import sys
 
@@ -34,6 +31,9 @@ prefernceMatrix = np.zeros([yatsuhashi_num, yatsuhashi_num]) # 対角成分も0
 # prefernceMatrix = np.identity(yatsuhashi_num) # 対角成分は1
 for dataOneRow in rawData[1:]:
 	prefernceMatrix[dataOneRow[0] - 1][dataOneRow[1] - 1] += 1
+
+prefernceMatrix = np.transpose(rawData)
+
 if(DEBUG_ALL or DEBUG_MAKE_MATRIX):
 	print(prefernceMatrix)
 
@@ -44,7 +44,7 @@ normPrefernceMatrix = np.linalg.norm(prefernceMatrix)
 
 rankingVector /= normRankingVector # r_0 / |r_0| を計算
 
-for i in range(1000):
+for i in range(100):
 	rankingVector = np.dot(prefernceMatrix, rankingVector) / normPrefernceMatrix
 if(DEBUG_ALL or DEBUG_CALC):
 	print(rankingVector)
