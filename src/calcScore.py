@@ -1,6 +1,5 @@
 import numpy as np
 import math
-from sklearn import preprocessing
 import os
 from scipy import optimize
 
